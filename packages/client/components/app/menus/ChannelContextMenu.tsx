@@ -1,9 +1,11 @@
-import { Match, Show, Switch } from "solid-js";
+import { Match, Show, Switch, createSignal } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
 import { Channel } from "revolt.js";
 
 import { useModals } from "@revolt/modal";
+
+import { NotificationMenu } from "./NotificationMenu";
 
 import MdBadge from "@material-design-icons/svg/outlined/badge.svg?component-solid";
 import MdDelete from "@material-design-icons/svg/outlined/delete.svg?component-solid";
@@ -14,6 +16,7 @@ import MdMarkChatRead from "@material-design-icons/svg/outlined/mark_chat_read.s
 import MdSettings from "@material-design-icons/svg/outlined/settings.svg?component-solid";
 import MdShare from "@material-design-icons/svg/outlined/share.svg?component-solid";
 import MdShield from "@material-design-icons/svg/outlined/shield.svg?component-solid";
+import MdNotifications from "@material-design-icons/svg/outlined/notifications.svg?component-solid";
 
 import {
   ContextMenu,
@@ -103,6 +106,9 @@ export function ChannelContextMenu(props: { channel: Channel }) {
     navigator.clipboard.writeText(props.channel.id);
   }
 
+  // Ref for floating menu
+  const [menuButton, setMenuButton] = createSignal<HTMLDivElement>();
+
   return (
     <ContextMenu>
       <Show
@@ -121,6 +127,10 @@ export function ChannelContextMenu(props: { channel: Channel }) {
           </ContextMenuButton>
         </Show>
         <ContextMenuDivider />
+          <ContextMenuButton ref={setMenuButton} icon={MdNotifications}>
+            <Trans>Notification options</Trans>
+          </ContextMenuButton>
+        <NotificationMenu anchor={menuButton} />
       </Show>
 
       <Show when={props.channel.server?.havePermission("ManageChannel")}>
