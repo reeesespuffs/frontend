@@ -542,7 +542,7 @@ export class Draft extends AbstractStore<"draft", TypeDraft> {
     ) {
       return;
     }
-    
+
     // We should not mention ourselves, otherwise use previous mention state
     const shouldMention =
       message.authorId !== selfId &&
